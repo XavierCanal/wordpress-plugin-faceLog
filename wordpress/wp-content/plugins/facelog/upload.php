@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $date = date('d-m-y h:i:s');
         }
 
-        $uploadfile = $uploaddir ."/". date('d-m-y'). "-" . wp_get_current_user()->user_login.".jpg";
+        $uploadfile = $uploaddir ."/". date('Y-m-d'). "-" . wp_get_current_user()->user_login.".jpg";
 
         if(move_uploaded_file($_FILES['imageupload']['tmp_name'], $uploadfile)) {
             echo "File valid and uploaded";
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         $tablename = $wpdb->prefix . 'faceLog';
 
 
-        $wpdb->insert($tablename, array('username' => wp_get_current_user()->user_login, 'imatge' => date('d-m-y'). "-" . wp_get_current_user()->user_login, 'post_date' => $date));
+        $wpdb->insert($tablename, array('username' => wp_get_current_user()->user_login, 'imatge' => "..\\wp-content\\plugins\\facelog\\uploads\\images\\".date('Y-m-d'). "-" . wp_get_current_user()->user_login, 'post_date' => $date));
     } else {
       echo "File is not an image.";
       $uploadOk = 0;

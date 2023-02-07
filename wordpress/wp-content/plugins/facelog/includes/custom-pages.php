@@ -12,42 +12,47 @@ if (isset($_POST['reloadFaceLog'])) {
 function facelog_gallery() : string
 {
     require_once "db.php";
-    //$plugin_js = plugins_url( __DIR__. "/..".'/assets/js/render.js');
+    $plugin_js = plugins_url( 'facelog/assets/js/render.js');
 
     $output = "<div class='facelog_gallery'>";
 
     $users = get_users(); // Array d'objectes WP_User
     $jsdata = [];
-    $output .= "before each";
+
+    //$rutaImatges = "../uploads/images/";
     foreach ( $users as $user ) {
-        $output .= "inside each";
         global $wpdb;
         $tablename = $wpdb->prefix . 'faceLog';
+        $output .= 'prefix db: '.$wpdb->prefix . 'faceLog';
+        $output .= 'login: '.$user->user_login;
 
-        $output .= " SELECT * FROM $tablename WHERE username = '$user->user_login' ";
         $data = facelog_dbget($user->user_login); // Funció que em retorna les dades donat un usuari
-        $output .= "$data";
-        if(!$data || count($data) == 0) continue;
-        $output .= "inside if";
+        if($data != null) {
+            $jsdata[$user->user_login]=[];
+            foreach($data as $row) {
+                $output .= "inside if";
 
-        $output .= "<div class='facelog_box' id='facelog_user_$user->user_login'>";
-        $output .= "<h2> $user->user_login </h2>";
-        $output .= "<canvas id='facelog_canvas_$user->user_login' width='300' height='500'> </canvas>";
-        $output .= "<div class='info' id='facelog_info_$user->user_login'> </div>";
-        $output .= "</div>";
+                $output .= "<div class='facelog_box' id='facelog_user_$user->user_login'>";
+                $output .= "<h2> $user->user_login </h2>";
+                $output .= "<canvas id='facelog_canvas_$user->user_login' width='300' height='500'> </canvas>";
+                $output .= "<div class='info' id='facelog_info_$user->user_login'></div>";
+                $output .= "</div>";
+                $imatge = $row->imatge.".jpg";
+                error_log('imatge: '.var_dump($imatge));
 
-        $jsdata[$user->user_login]=[];
 
-        foreach($data as $row)
-        {
-            $jsdata[$user->user_login][]= ["imatge" => $row -> image, "post_date" => $row->date];
+                $jsdata[$user->user_login][]= ["img" => $imatge, "date" => $row->post_date];
+            }
+        } else {
+            $output = "DATA NULL";
         }
+
     }
 
     $output .= "</div>";
     $output .= "<script> let facelog_data = " . json_encode($jsdata) ."</script>";
     $rand = rand();
-    //$output .= "<script src='$plugin_js' type='text/javascript' />";
+    $output .= "<script src='$plugin_js' type='text/javascript' />";
     require_once(ABSPATH . 'wp-content/plugins/facelog/includes/custom-pages.php');
 
     return '
@@ -61,6 +66,7 @@ function facelog_gallery() : string
 
     '.$output;
 }
+
 
 
 /**

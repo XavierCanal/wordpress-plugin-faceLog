@@ -24,7 +24,6 @@ let facelog_dates = {};
         let interval = setInterval(()=>{
             let canvas = document.getElementById("facelog_canvas_" + user)
             let info = document.getElementById("facelog_info_" + user)
-
             let context = canvas.getContext('2d');
             let image = facelog_images[user][facelog_indexes[user]]
             context.globalCompositeOperation = "source-over"

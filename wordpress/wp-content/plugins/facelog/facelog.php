@@ -48,12 +48,11 @@ register_deactivation_hook( __FILE__, 'deactivate_plugin' );
   createPostsTable();
 
   require_once(ABSPATH . 'wp-content/plugins/facelog/includes/custom-pages.php');
-  $content = facelog_gallery();
 
    // Create an array of post data for the feed of pictures
    $picture_feed_post = array(
      'post_title' => 'Picture Feed',
-     'post_content' => $content,
+     'post_content' => "[facelog_gallery]",
      'post_status' => 'publish',
      'post_type' => 'page'
    );
@@ -75,6 +74,7 @@ register_deactivation_hook( __FILE__, 'deactivate_plugin' );
    $form_id = wp_insert_post($form_post);
    update_option('fl_form_post',$form_id);
 
+
  }
 
  function createPostsTable() {
@@ -84,7 +84,7 @@ register_deactivation_hook( __FILE__, 'deactivate_plugin' );
   $table_name = $wpdb->prefix . 'faceLog';
 
   // Define the SQL query
-  $sql = "CREATE TABLE $table_name (
+  $sql = "CREATE TABLE IF NOT EXISTS $table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     username text NOT NULL,
     imatge text NOT NULL UNIQUE,
@@ -96,6 +96,8 @@ register_deactivation_hook( __FILE__, 'deactivate_plugin' );
   require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
   // Create the table
-  dbDelta($sql);
+  dbDelta($sql) or die ("databse no created");
  }
- 
+
+require_once(ABSPATH . 'wp-content/plugins/facelog/includes/custom-pages.php');
+add_shortcode("facelog_gallery", "facelog_gallery");
