@@ -1,16 +1,15 @@
 
 # BEGIN WordPress
-# The directives (lines) between "BEGIN WordPress" and "END WordPress" are
-# dynamically generated, and should only be modified via WordPress filters.
-# Any changes to the directives between these markers will be overwritten.
+# Les directives (línies) entre "BEGIN WordPress" i "END WordPress" es generen dinàmicament i haurien de ser solament modificades mitjançant els filtres del WordPress.
+# Qualsevol canvi entre aquestes marques se sobreescriuran.
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-RewriteBase /UF3/wordpress-plugin-faceLog/wordpress/
+RewriteBase /wordpress/wordpress/
 RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /UF3/wordpress-plugin-faceLog/wordpress/index.php [L]
+RewriteRule . /wordpress/wordpress/index.php [L]
 </IfModule>
 
 # END WordPress

@@ -16,7 +16,4 @@ function facelog_dbget($username) {
     }
     return null;
     
-
-    error_log('result: '.var_dump($result));
-    
 }
